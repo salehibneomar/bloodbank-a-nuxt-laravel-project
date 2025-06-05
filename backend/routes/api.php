@@ -14,3 +14,6 @@ Route::controller(TodoController::class)
         Route::patch('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
+
+ Route::get('donors', [\App\Http\Controllers\DonorController::class, 'index'])
+    ->name('donors.index');

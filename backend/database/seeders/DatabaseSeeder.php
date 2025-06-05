@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,9 +10,9 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-    {
-        // User::factory(10)->create();
-
-        $this->call(TodoSeeder::class);
+    {;
+        \Database\Factories\AdminFactory::new()->create();
+        //\Database\Factories\DonorFactory::new()->count(1000)->create();
+        //\Database\Factories\VisitorFactory::new()->count(100)->create();
     }
 }
