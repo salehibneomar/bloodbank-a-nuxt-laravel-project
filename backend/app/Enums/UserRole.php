@@ -8,7 +8,7 @@ enum UserRole: string
     case Donor = 'donor';
     case Visitor = 'visitor';
 
-    public static function values(): array
+    public static function allRoles(): array
     {
         return array_map(fn(self $role) => $role->value, self::cases());
     }
