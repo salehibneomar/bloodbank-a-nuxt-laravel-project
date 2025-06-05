@@ -16,7 +16,7 @@ class DonorFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => fake()->userName().date('His') . mt_rand(1000, 999999) . '@' . fake()->freeEmailDomain(),
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
             'remember_token' => Str::random(10),

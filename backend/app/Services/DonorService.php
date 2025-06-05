@@ -10,7 +10,28 @@ class DonorService
     public function getAll(Request $request): LengthAwarePaginator
     {
         $params = $request->all();
-        $donors = Donor::paginate($params['per_page'] ?? 100);
-        return $donors;
+        $perPage = $params['per_page'] ?? 7000;
+        $page = $params['page'] ?? 1;
+        $cacheKey = "donors:page:{$page}:per_page:{$perPage}";
+        $totalKey = "donors:total";
+
+        $data = cache()->get($cacheKey);
+        $total = cache()->get($totalKey);
+
+        if ($data === null) {
+            $data = Donor::forPage($page, $perPage)->get()->toArray();
+            cache()->put($cacheKey, $data, 600);
+        }
+        if ($total === null) {
+            $total = Donor::count();
+            cache()->put($totalKey, $total, 600);
+        }
+
+        return new LengthAwarePaginator(
+            $data,
+            $total,
+            $perPage,
+            $page
+        );
     }
 }
