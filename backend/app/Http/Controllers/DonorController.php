@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Donor;
 use App\Traits\ApiResponserTrait;
 use App\Services\DonorService;
+use App\Http\Requests\DonorRequest;
+use \Exception;
+use App\Enums\HttpStatus;
 
 class DonorController extends Controller
 {
     use ApiResponserTrait;
+
     private DonorService $donorService;
 
     public function __construct(DonorService $donorService)
@@ -24,12 +27,15 @@ class DonorController extends Controller
         return $this->listDataResponse($donors);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function register(DonorRequest $request)
     {
-        //
+        try{
+            $donor = $this->donorService->register($request->validated());
+            return $this->singleModelResponse($donor, HttpStatus::CREATED, 'Registion successful');
+        }
+        catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
     }
 
     /**
@@ -90,4 +96,6 @@ class DonorController extends Controller
         }
         cache()->forget('donors:total');
     }
+
+
 }

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Traits\ApiResponserTrait;
-use App\Services\AuthService;
 use App\Enums\HttpStatus;
-use App\Http\Requests\AuthRequest as AuthRequest;
+use App\Http\Requests\AuthRequest;
 use \Exception;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
