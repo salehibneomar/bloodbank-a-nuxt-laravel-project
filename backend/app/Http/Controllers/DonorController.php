@@ -37,7 +37,10 @@ class DonorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // ...existing code for storing donor...
+        // Invalidate donor list cache
+        $this->invalidateDonorCache();
+        // ...existing code...
     }
 
     /**
@@ -61,7 +64,9 @@ class DonorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // ...existing code for updating donor...
+        $this->invalidateDonorCache();
+        // ...existing code...
     }
 
     /**
@@ -69,6 +74,20 @@ class DonorController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // ...existing code for deleting donor...
+        $this->invalidateDonorCache();
+        // ...existing code...
+    }
+
+    /**
+     * Invalidate donor list and total cache.
+     */
+    protected function invalidateDonorCache()
+    {
+        // Remove all paginated donor cache keys and total
+        foreach (cache()->getRedis()->keys('donors:page:*') as $key) {
+            cache()->forget(str_replace(config('cache.prefix').':', '', $key));
+        }
+        cache()->forget('donors:total');
     }
 }
