@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
 
+require __DIR__.'/auth.php';
 
 Route::controller(TodoController::class)
     ->prefix('todos')

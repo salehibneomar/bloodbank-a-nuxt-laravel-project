@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Enums\UserRole;
 
 class User extends Authenticatable
 {
@@ -36,6 +37,8 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'deleted_at',
+        'updated_at',
     ];
 
     /**
@@ -49,5 +52,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::Admin->value;
+    }
+
+    public function isDonor(): bool
+    {
+        return $this->role === UserRole::Donor->value;
+    }
+
+    public function donorInformation()
+    {
+        return $this->hasOne(DonorInformation::class, 'user_id', 'id');
     }
 }

@@ -23,7 +23,7 @@ trait ApiResponserTrait
         return class_basename($data);
     }
 
-    protected function singleModelResponse(Model $data, HttpStatus $status = HttpStatus::OK, string | bool $customMessage = false): JsonResponse
+    protected function singleModelResponse(Model | array $data, HttpStatus $status = HttpStatus::OK, string | bool $customMessage = false): JsonResponse
     {
 
         return $this->formatResponse(

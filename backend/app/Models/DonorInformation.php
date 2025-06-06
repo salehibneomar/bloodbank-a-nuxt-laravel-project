@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class DonorInformation extends Model
+{
+    use SoftDeletes;
+
+    protected $table = 'donor_information';
+
+    protected $fillable = [
+        'address',
+        'blood_group',
+        'is_available',
+        'last_donation_date',
+        'profession',
+        'religion',
+        'age',
+        'medical_conditions',
+        'user_id'
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
+    protected $casts = [
+        'last_donation_date' => 'datetime',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+}
