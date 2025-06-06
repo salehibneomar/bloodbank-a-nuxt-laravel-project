@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('donor_information', function (Blueprint $table) {
             $table->id();
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->enum('blood_group', BloodGroup::allGroups());
             $table->boolean('is_available')->default(true);
             $table->date('last_donation_date')->nullable();

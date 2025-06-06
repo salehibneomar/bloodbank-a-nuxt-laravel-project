@@ -16,5 +16,5 @@ Route::controller(TodoController::class)
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
- Route::get('donors', [\App\Http\Controllers\DonorController::class, 'index'])
+Route::get('donors', [\App\Http\Controllers\DonorController::class, 'index'])
     ->name('donors.index');

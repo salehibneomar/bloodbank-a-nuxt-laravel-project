@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {;
         \Database\Factories\AdminFactory::new()->create();
-        \Database\Factories\VisitorFactory::new()->count(100)->create();
-        \Database\Factories\DonorFactory::new()->count(100)->create();
+        //\Database\Factories\VisitorFactory::new()->count(100)->create();
+        //\Database\Factories\DonorFactory::new()->count(100)->create();
     }
 }
