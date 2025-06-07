@@ -8,6 +8,9 @@ use App\Services\DonorService;
 use App\Http\Requests\DonorRequest;
 use \Exception;
 use App\Enums\HttpStatus;
+use Illuminate\Support\Facades\Auth;
+use App\Jobs\InvalidateDonorCacheJob;
+use App\Enums\CrudStatus;
 
 class DonorController extends Controller
 {
@@ -38,16 +41,6 @@ class DonorController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        // ...existing code for storing donor...
-        // Invalidate donor list cache
-        $this->invalidateDonorCache();
-        // ...existing code...
-    }
 
     /**
      * Display the specified resource.
@@ -68,11 +61,21 @@ class DonorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(DonorRequest $request)
     {
-        // ...existing code for updating donor...
-        $this->invalidateDonorCache();
-        // ...existing code...
+        $donorId = Auth::user()->id;
+        $data = $request->except(['is_active', 'role']);
+
+        try {
+            $user = $this->donorService->update($data, $donorId);
+            //dispatch(new InvalidateDonorCacheJob());
+            return $this->singleModelResponse($user, HttpStatus::OK, CrudStatus::UPDATED->value);
+        } catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
+
+
+
     }
 
     /**
@@ -81,21 +84,10 @@ class DonorController extends Controller
     public function destroy(string $id)
     {
         // ...existing code for deleting donor...
-        $this->invalidateDonorCache();
+        dispatch(new InvalidateDonorCacheJob());
         // ...existing code...
     }
 
-    /**
-     * Invalidate donor list and total cache.
-     */
-    protected function invalidateDonorCache()
-    {
-        // Remove all paginated donor cache keys and total
-        foreach (cache()->getRedis()->keys('donors:page:*') as $key) {
-            cache()->forget(str_replace(config('cache.prefix').':', '', $key));
-        }
-        cache()->forget('donors:total');
-    }
 
 
 }

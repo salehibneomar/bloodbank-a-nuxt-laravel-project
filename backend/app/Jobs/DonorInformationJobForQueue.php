@@ -3,28 +3,29 @@
 namespace App\Jobs;
 
 use App\Models\DonorInformation;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Arr;
 
 class DonorInformationJobForQueue implements ShouldQueue
 {
     use Queueable;
 
-    protected $donorInformation;
+    protected $updatedInformation;
+    protected $donor;
 
-    public function __construct(array $donorInformation)
+    public function __construct(array $updatedInformation, User | null $donor = null)
     {
-        $this->donorInformation = $donorInformation;
+        $this->updatedInformation = $updatedInformation;
+        $this->donor = $donor;
     }
 
     public function handle()
     {
-        extract($this->donorInformation);
-        $donorInformation = new DonorInformation();
-        $donorInformation->user_id = $user_id;
-        $donorInformation->blood_group = $blood_group;
-
+        $donorInformation = $this->donor ? DonorInformation::where('user_id', $this->donor->id)->first() : new DonorInformation();
+        $data = Arr::only($this->updatedInformation, $donorInformation->getFillable());
+        $donorInformation->fill($data);
         $donorInformation->save();
-
     }
 }
