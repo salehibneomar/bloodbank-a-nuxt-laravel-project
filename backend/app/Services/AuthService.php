@@ -32,9 +32,9 @@ class AuthService{
         ];
     }
 
-    public function logout(): User
+    public function logout(): User | null
     {
-        /** @var User $user */
+    /** @var User | null auth $user */
         $user = Auth::user();
 
         if ($user) {

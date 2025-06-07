@@ -8,6 +8,7 @@ require __DIR__.'/auth.php';
 Route::controller(TodoController::class)
     ->prefix('todos')
     ->name('todos.')
+    ->middleware('auth')
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}', 'show')->name('show');

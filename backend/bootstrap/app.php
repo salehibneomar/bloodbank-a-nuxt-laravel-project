@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Exceptions\Handlers\AuthExceptionHandler;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,5 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append(App\Http\Middleware\AddAppOwnerHeader::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
+            $handler = new AuthExceptionHandler();
+            return $handler->handle($e);
+        });
     })->create();

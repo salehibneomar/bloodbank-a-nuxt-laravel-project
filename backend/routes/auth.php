@@ -11,7 +11,7 @@ Route::prefix('auth')
         Route::controller(AuthController::class)
             ->group(function () {
                 Route::post('login', 'login')->name('login');
-                Route::post('logout', 'logout')->name('logout');
+                Route::post('logout', 'logout')->name('logout')->middleware('auth:sanctum');
             });
         Route::controller(DonorController::class)
             ->prefix('donors')
