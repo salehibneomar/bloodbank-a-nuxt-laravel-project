@@ -8,6 +8,8 @@ use App\Enums\UserRole;
 use App\Jobs\DonorInformationJobForQueue;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Arr;
+use App\Models\DonorInformation;
 
 class DonorService
 {
@@ -53,6 +55,20 @@ class DonorService
             'user_id'     => $user->id,
             'blood_group' => $blood_group,
         ]));
+
+        return $user;
+    }
+
+    public function update(array $data, int $userId): User
+    {
+        $user = User::findOrFail($userId);
+        $filteredUserData = Arr::only($data, $user->getFillable());
+        if (isset($filteredUserData['password'])) {
+            $filteredUserData['password'] = Hash::make($filteredUserData['password']);
+        }
+        $user->fill($filteredUserData);
+        $user->save();
+        dispatch(new DonorInformationJobForQueue($data, $user));
 
         return $user;
     }

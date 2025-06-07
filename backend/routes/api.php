@@ -8,7 +8,6 @@ require __DIR__.'/auth.php';
 Route::controller(TodoController::class)
     ->prefix('todos')
     ->name('todos.')
-    ->middleware('auth')
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/{id}', 'show')->name('show');
@@ -19,3 +18,8 @@ Route::controller(TodoController::class)
 
 Route::get('donors', [\App\Http\Controllers\DonorController::class, 'index'])
     ->name('donors.index');
+
+
+Route::put('donor/profile', [\App\Http\Controllers\DonorController::class, 'update'])
+->name('donors.profile.update')
+->middleware('auth:sanctum');
