@@ -9,7 +9,9 @@ use App\Jobs\DonorInformationJobForQueue;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Arr;
-use App\Models\DonorInformation;
+use App\Jobs\CacheDonorListJob;
+use App\Jobs\InvalidateDonorCacheJob;
+use App\Enums\DonorCache;
 
 class DonorService
 {
@@ -18,19 +20,22 @@ class DonorService
         $params = $request->all();
         $perPage = $params['per_page'] ?? 20;
         $page = $params['page'] ?? 1;
-        $cacheKey = "donors:view:page:{$page}:per_page:{$perPage}";
+        $listKey = "donors:view:page:{$page}:per_page:{$perPage}";
         $totalKey = "donors:view:total";
+        $commonTag = DonorCache::LIST_TAG->value;
 
-        $data = cache()->remember($cacheKey, 600, function () use ($page, $perPage) {
-            return DB::table('donor_view')
+        $data = cache()->tags([$commonTag])->get($listKey);
+        $total = cache()->tags([$commonTag])->get($totalKey);
+
+        if ($data === null || $total === null) {
+            $data = DB::table('donor_view')
                 ->forPage($page, $perPage)
                 ->get()
                 ->toArray();
-        });
+            $total = DB::table('donor_view')->count();
 
-        $total = cache()->remember($totalKey, 600, function () {
-            return DB::table('donor_view')->count();
-        });
+            dispatch(new CacheDonorListJob($listKey, $totalKey, $data, $total));
+        }
 
         return new LengthAwarePaginator(
             $data,
@@ -55,6 +60,7 @@ class DonorService
             'user_id'     => $user->id,
             'blood_group' => $blood_group,
         ]));
+        dispatch((new InvalidateDonorCacheJob())->delay(now()->addMilliseconds(300)));
 
         return $user;
     }
@@ -68,7 +74,9 @@ class DonorService
         }
         $user->fill($filteredUserData);
         $user->save();
+
         dispatch(new DonorInformationJobForQueue($data, $user));
+        dispatch((new InvalidateDonorCacheJob())->delay(now()->addMilliseconds(300)));
 
         return $user;
     }
