@@ -27,6 +27,9 @@ class AuthController extends Controller
         if (!$response['attempt']) {
             return $this->errorResponse(new Exception('Invalid credentials'), HttpStatus::UNAUTHORIZED);
         }
+        if(!$response['is_active']) {
+            return $this->errorResponse(new Exception('Locked'), HttpStatus::UNAUTHORIZED, 'Your account is locked. Please contact support.');
+        }
         $loginData = [
             'token' => $response['token'],
             'user' => $response['user'],
