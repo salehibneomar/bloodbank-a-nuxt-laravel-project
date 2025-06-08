@@ -14,14 +14,17 @@ class AuthService{
         $isSuccessful = !!(Auth::attempt($credentials));
         $token = null;
         $user = null;
+        $isActive = false;
 
         if($isSuccessful){
             /** @var User|null $user */
             $user = Auth::user();
-
-            if ($user) {
+            if (isset($user) && $user !==null) {
                 $user->tokens()->delete();
-                $token = $user->createToken('api_token')->plainTextToken;
+                if($user->is_active){
+                    $token = $user->createToken('api_token')->plainTextToken;
+                    $isActive = true;
+                }
             }
         }
 
@@ -29,6 +32,7 @@ class AuthService{
             'attempt' => $isSuccessful,
             'user' => $user,
             'token' => $token,
+            'is_active' => $isActive
         ];
     }
 

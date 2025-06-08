@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->append(App\Http\Middleware\AddAppOwnerHeader::class);
+        $middleware->alias([
+        'role' => App\Http\Middleware\OperationControlMiddleware::class,
+    ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {

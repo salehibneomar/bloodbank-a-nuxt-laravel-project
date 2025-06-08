@@ -9,8 +9,8 @@ use App\Http\Requests\DonorRequest;
 use \Exception;
 use App\Enums\HttpStatus;
 use Illuminate\Support\Facades\Auth;
-use App\Jobs\InvalidateDonorCacheJob;
 use App\Enums\CrudStatus;
+use Illuminate\Http\JsonResponse;
 
 class DonorController extends Controller
 {
@@ -23,7 +23,7 @@ class DonorController extends Controller
         $this->donorService = $donorService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request) : JsonResponse
     {
         try
         {
@@ -35,7 +35,7 @@ class DonorController extends Controller
         }
     }
 
-    public function register(DonorRequest $request)
+    public function register(DonorRequest $request) : JsonResponse
     {
         try{
             $donor = $this->donorService->register($request->validated());
@@ -46,7 +46,7 @@ class DonorController extends Controller
         }
     }
 
-    public function update(DonorRequest $request)
+    public function update(DonorRequest $request) : JsonResponse
     {
         $donorId = Auth::user()->id;
         $data = $request->except(['is_active', 'role']);

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminControlController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
 
@@ -22,4 +23,8 @@ Route::get('donors', [\App\Http\Controllers\DonorController::class, 'index'])
 
 Route::put('donors/profile', [\App\Http\Controllers\DonorController::class, 'update'])
 ->name('donors.profile.update')
-->middleware('auth:sanctum');
+->middleware(['auth:sanctum', 'role:donor']);
+
+Route::put('donors/change-status/{id}', [AdminControlController::class, 'changeStatus'])
+    ->name('donors.change-status')
+    ->middleware(['auth:sanctum', 'role:admin']);
