@@ -20,6 +20,6 @@ Route::get('donors', [\App\Http\Controllers\DonorController::class, 'index'])
     ->name('donors.index');
 
 
-Route::put('donor/profile', [\App\Http\Controllers\DonorController::class, 'update'])
+Route::put('donors/profile', [\App\Http\Controllers\DonorController::class, 'update'])
 ->name('donors.profile.update')
 ->middleware('auth:sanctum');

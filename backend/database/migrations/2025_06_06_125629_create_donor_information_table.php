@@ -30,7 +30,7 @@ return new class extends Migration
             ->on('users')
             ->onDelete('cascade')
             ->onUpdate('cascade');
-            $table->index(['user_id', 'is_available', 'blood_group']);
+            $table->index(['id','user_id', 'is_available', 'blood_group']);
         });
     }
 

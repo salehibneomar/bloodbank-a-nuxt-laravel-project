@@ -25,9 +25,14 @@ class DonorController extends Controller
 
     public function index(Request $request)
     {
-        // Use the service to get all donors with pagination
+        try
+        {
         $donors = $this->donorService->getAll($request);
         return $this->listDataResponse($donors);
+        }
+        catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
     }
 
     public function register(DonorRequest $request)
@@ -41,26 +46,6 @@ class DonorController extends Controller
         }
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(DonorRequest $request)
     {
         $donorId = Auth::user()->id;
@@ -68,26 +53,12 @@ class DonorController extends Controller
 
         try {
             $user = $this->donorService->update($data, $donorId);
-            //dispatch(new InvalidateDonorCacheJob());
             return $this->singleModelResponse($user, HttpStatus::OK, CrudStatus::UPDATED->value);
         } catch (Exception $e) {
             return $this->errorResponse($e);
         }
 
-
-
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        // ...existing code for deleting donor...
-        dispatch(new InvalidateDonorCacheJob());
-        // ...existing code...
-    }
-
 
 
 }
