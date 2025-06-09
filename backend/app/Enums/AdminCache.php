@@ -2,12 +2,11 @@
 
 namespace App\Enums;
 
-enum DonorCache: string
+enum AdminCache: string
 {
-    case LIST_TAG = 'donors';
+    case DASHBOARD_TAG = 'donors';
 
     public static function invalidateTime () : int {
         return 21600;
     }
-
 }

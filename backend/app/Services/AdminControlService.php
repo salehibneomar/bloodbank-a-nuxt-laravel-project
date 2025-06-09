@@ -5,6 +5,9 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\InvalidateDonorCacheJob;
+use Illuminate\Support\Facades\DB;
+use App\Enums\AdminCache;
+use App\Jobs\AdminDashboardCacheJob;
 
 class AdminControlService
 {
@@ -14,7 +17,22 @@ class AdminControlService
         return Auth::user()->id === $userId;
     }
 
-    public function changeStatus(int $userId, bool $status): bool | User
+    public function getDashboardData(): array
+    {
+        $cacheKey = 'admin:dashboard:data';
+        $commonTag = AdminCache::DASHBOARD_TAG->value;
+        $cachedData = $result = cache()->tags([$commonTag])->get($cacheKey);
+
+        if($cachedData === null){
+            $result = DB::table('admin_dashboard_view')->first();
+            $result = $result;
+            dispatch((new AdminDashboardCacheJob($cacheKey, $result)));
+        }
+
+        return (array) $result;
+    }
+
+    public function changeUserStatus(int $userId, bool $status): bool | User
     {
         if($this->isSameUser($userId)) {
             return false;
@@ -31,4 +49,5 @@ class AdminControlService
 
         return $user;
     }
+
 }
