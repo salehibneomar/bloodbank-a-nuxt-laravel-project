@@ -20,8 +20,12 @@ class AdminControlService
             return false;
         }
         $user = User::findOrFail($userId);
-        $user->is_active = $status;
+        $user->is_active = $status ? 1 : 0;
         $user->save();
+
+        if ($user->is_active == 0 && method_exists($user, 'tokens')) {
+            $user->tokens()->delete();
+        }
 
         dispatch(new InvalidateDonorCacheJob());
 
