@@ -24,7 +24,7 @@ class AdminControlController extends Controller
 
     public function changeStatus(Request $request, int $userId): JsonResponse
     {
-        if (!$request->has('is_active')){
+        if (!$request->has('is_active') || !in_array($request->is_active, [0, 1])){
             return $this->errorResponse(new Exception('Status is required'), HttpStatus::UNPROCESSABLE_ENTITY);
         }
 
