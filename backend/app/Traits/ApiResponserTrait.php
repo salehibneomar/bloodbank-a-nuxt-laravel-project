@@ -23,7 +23,7 @@ trait ApiResponserTrait
         return class_basename($data);
     }
 
-    protected function singleModelResponse(Model | array $data, HttpStatus $status = HttpStatus::OK, string | bool $customMessage = false): JsonResponse
+    protected function singleModelResponse(Model | array $data, HttpStatus $status = HttpStatus::OK, ?string $customMessage = null): JsonResponse
     {
 
         return $this->formatResponse(
@@ -47,7 +47,7 @@ trait ApiResponserTrait
         );
     }
 
-    protected function errorResponse(Exception $e, HttpStatus $status = HttpStatus::INTERNAL_SERVER_ERROR, $customMessage = null): JsonResponse
+    protected function errorResponse(Exception $e, HttpStatus $status = HttpStatus::INTERNAL_SERVER_ERROR, ?string $customMessage = null): JsonResponse
     {
         $debug = config('app.debug');
         $statusArr = [

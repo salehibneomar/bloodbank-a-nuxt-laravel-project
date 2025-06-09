@@ -16,13 +16,13 @@ class CacheDonorListJob implements ShouldQueue
     protected $total;
     protected $invalidateCache;
 
-    public function __construct(string $cacheKey, string $totalKey, array $data = [], int $total = 0, int $invalidateCache = 21600)
+    public function __construct(string $cacheKey, string $totalKey, array $data = [], int $total = 0, ?int $invalidateCache = null)
     {
         $this->cacheKey = $cacheKey;
         $this->totalKey = $totalKey;
         $this->data = $data;
         $this->total = $total;
-        $this->invalidateCache = $invalidateCache;
+        $this->invalidateCache = $invalidateCache ?? DonorCache::invalidateTime();
     }
 
     public function handle()

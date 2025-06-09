@@ -1,30 +1,40 @@
 <?php
 
-use App\Http\Controllers\AdminControlController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TodoController;
+use App\Http\Controllers\DonorController;
+use App\Http\Controllers\AdminControlController;
 
 require __DIR__.'/auth.php';
 
-Route::controller(TodoController::class)
-    ->prefix('todos')
-    ->name('todos.')
-    ->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/{id}', 'show')->name('show');
-        Route::post('/', 'store')->name('store');
-        Route::patch('/{id}', 'update')->name('update');
-        Route::delete('/{id}', 'destroy')->name('destroy');
-    });
 
-Route::get('donors', [\App\Http\Controllers\DonorController::class, 'index'])
-    ->name('donors.index');
+Route::controller(AdminControlController::class)
+->prefix('admin')
+->name('admin.')
+->middleware(['auth:sanctum', 'role:admin'])
+->group(function (){
+    Route::get('dashboard', 'getDashboardData')->name('dashboard');
+});
 
+Route::prefix('donors')
+->name('donors.')
+->group(function (){
 
-Route::put('donors/profile', [\App\Http\Controllers\DonorController::class, 'update'])
-->name('donors.profile.update')
-->middleware(['auth:sanctum', 'role:donor']);
+    Route::get('/', [DonorController::class, 'index'])
+        ->name('all');
 
-Route::put('donors/change-status/{id}', [AdminControlController::class, 'changeStatus'])
-    ->name('donors.change-status')
-    ->middleware(['auth:sanctum', 'role:admin']);
+    Route::controller(DonorController::class)
+        ->middleware(['auth:sanctum', 'role:donor'])
+        ->name('user.')
+        ->group(function (){
+            Route::put('profile', 'update')
+                ->name('profile.update');
+        });
+
+    Route::controller(AdminControlController::class)
+        ->middleware(['auth:sanctum', 'role:admin'])
+        ->name('admin.')
+        ->group(function (){
+            Route::put('change-status/{id}', 'changeUserStatus')
+                ->name('change-status');
+        });
+});
