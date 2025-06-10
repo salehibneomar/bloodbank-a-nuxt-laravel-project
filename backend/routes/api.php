@@ -19,22 +19,24 @@ Route::prefix('donors')
 ->name('donors.')
 ->group(function (){
 
-    Route::get('/', [DonorController::class, 'index'])
-        ->name('all');
+    Route::controller(DonorController::class)
+        ->group(function (){
+             Route::get('/', 'index')->name('all');
+             Route::get('{id}/information', 'showDonorInformation')->name('information');
+        });
 
     Route::controller(DonorController::class)
         ->middleware(['auth:sanctum', 'role:donor'])
         ->name('user.')
         ->group(function (){
-            Route::put('profile', 'update')
-                ->name('profile.update');
+            Route::put('profile', 'update')->name('profile.update');
+            Route::get('profile', 'profile')->name('profile.show');
         });
 
     Route::controller(AdminControlController::class)
         ->middleware(['auth:sanctum', 'role:admin'])
         ->name('admin.')
         ->group(function (){
-            Route::put('change-status/{id}', 'changeUserStatus')
-                ->name('change-status');
+            Route::put('change-status/{id}', 'changeUserStatus')->name('change-status');
         });
 });

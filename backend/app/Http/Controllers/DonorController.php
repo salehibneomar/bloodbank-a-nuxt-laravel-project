@@ -35,6 +35,27 @@ class DonorController extends Controller
         }
     }
 
+    public function showDonorInformation(int $userId) : JsonResponse
+    {
+        try {
+            $donorInformation = $this->donorService->getDonorInformationByDonorId($userId);
+            return $this->singleModelResponse($donorInformation, HttpStatus::OK);
+        } catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
+    public function profile() : JsonResponse
+    {
+        $donorId = Auth::user()->id;
+        try {
+            $donorInformation = $this->donorService->getDonorInformationByDonorId($donorId);
+            return $this->singleModelResponse($donorInformation, HttpStatus::OK);
+        } catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
     public function register(DonorRequest $request) : JsonResponse
     {
         try{
