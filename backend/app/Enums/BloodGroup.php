@@ -25,4 +25,16 @@ enum BloodGroup: string {
     {
         return array_map(fn(self $group) => $group->value, self::cases());
     }
+
+    public static function mappedBloodGroup(): array
+    {
+        $map = [];
+        foreach (self::cases() as $case) {
+            $value = $case->value;
+            $newKey = str_replace(['+', '-'], ['ve', 'neg'], $value);
+            $map[$newKey] = $value;
+        }
+        return $map;
+    }
+
 }

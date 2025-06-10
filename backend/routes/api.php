@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonorController;
 use App\Http\Controllers\AdminControlController;
+use App\Http\Controllers\MetaInformationController;
 
 require __DIR__.'/auth.php';
 
@@ -40,3 +41,10 @@ Route::prefix('donors')
             Route::put('change-status/{id}', 'changeUserStatus')->name('change-status');
         });
 });
+
+Route::controller(MetaInformationController::class)
+    ->prefix('meta')
+    ->name('meta.')
+    ->group(function (){
+        Route::get('information', 'index')->name('information');
+    });
