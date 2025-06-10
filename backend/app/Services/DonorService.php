@@ -12,6 +12,8 @@ use Illuminate\Support\Arr;
 use App\Jobs\CacheDonorListJob;
 use App\Jobs\InvalidateDonorCacheJob;
 use App\Enums\DonorCache;
+use Illuminate\Support\Carbon;
+use App\Enums\BloodGroup;
 
 class DonorService
 {
@@ -20,7 +22,9 @@ class DonorService
         $params = $request->all();
         $perPage = $params['per_page'] ?? 20;
         $page = $params['page'] ?? 1;
-        $listKey = "donors:view:page:{$page}:per_page:{$perPage}";
+        $bloodGroup = ($request->has('blood_group') && isset($request->blood_group) && isset(BloodGroup::mappedBloodGroup()[$request->blood_group])) ? BloodGroup::mappedBloodGroup()[$request->blood_group] : null;
+
+        $listKey = "donors:view:page:{$page}:per_page:{$perPage}" . ($bloodGroup !== null ? ":blood_group:{$bloodGroup}" : "");
         $totalKey = "donors:view:total";
         $commonTag = DonorCache::LIST_TAG->value;
 
@@ -28,11 +32,13 @@ class DonorService
         $total = cache()->tags([$commonTag])->get($totalKey);
 
         if ($data === null || $total === null) {
-            $data = DB::table('donor_view')
-                ->forPage($page, $perPage)
+            $query = DB::table('donor_view');
+            $query = $bloodGroup ? $query->where('blood_group', $bloodGroup) : $query;
+
+            $data = $query->forPage($page, $perPage)
                 ->get()
                 ->toArray();
-            $total = DB::table('donor_view')->count();
+            $total = $query->count();
 
             dispatch(new CacheDonorListJob($listKey, $totalKey, $data, $total));
         }
@@ -94,6 +100,14 @@ class DonorService
         if (isset($filteredUserData['password'])) {
             $filteredUserData['password'] = Hash::make($filteredUserData['password']);
         }
+
+        if(isset($data['last_donation_date'])){
+            $currentDate = now();
+            $lastDonationDate = Carbon::parse($data['last_donation_date']);
+            $diffInMonths = abs($currentDate->diffInMonths($lastDonationDate));
+            $data['is_available'] = $diffInMonths < 3 ? 0 : 1;
+        }
+
         $user->fill($filteredUserData);
         $user->save();
 
