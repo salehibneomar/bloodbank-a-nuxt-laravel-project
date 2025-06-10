@@ -45,6 +45,28 @@ class DonorService
         );
     }
 
+    public function getDonorInformationByDonorId(int $id) : array
+    {
+        $donorInformation = User::with('donorInformation')
+        ->select('id', 'name', 'email', 'phone', 'created_at')
+        ->where('id', $id)
+        ->where('role', UserRole::Donor->value)
+        ->where('is_active', true)
+        ->firstOrFail();
+
+        $userArray = $donorInformation->toArray();
+        $donorInfoArray = $userArray['donor_information'] ?? [];
+        unset($userArray['donor_information']);
+
+        if(!empty($donorInfoArray)) {
+            unset($donorInfoArray['user_id']);
+        }
+
+        $flatDonorInfo = array_merge($userArray, $donorInfoArray);
+
+        return $flatDonorInfo;
+    }
+
     public function register(array $data) : User
     {
         extract($data);
