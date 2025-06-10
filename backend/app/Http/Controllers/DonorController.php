@@ -40,7 +40,11 @@ class DonorController extends Controller
         try {
             $donorInformation = $this->donorService->getDonorInformationByDonorId($userId);
             return $this->singleModelResponse($donorInformation, HttpStatus::OK);
-        } catch (Exception $e) {
+        }
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return $this->errorResponse($e, HttpStatus::NOT_FOUND);
+        }
+        catch (Exception $e) {
             return $this->errorResponse($e);
         }
     }
