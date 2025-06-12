@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { isValidEmail } from "~/utils/helpers";
 
 definePageMeta({
   name: "auth-donor-register",
   title: "Donor Registration",
   requireAuth: false,
+  layout: 'global'
 });
 
 useHead({
@@ -13,15 +12,15 @@ useHead({
 });
 
 
-const registerFormData : AuthDonor = {
-  name : '',
+const registerFormData = ref<AuthDonor>({
+  name: '',
   email: '',
   blood_group: '',
   password: '',
   password_confirmation: ''
-}
+})
 
-const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+const bloodGroupOptions = bloodGroups
 
 const emailRule = (val: string): boolean | string => {
   if (!val) return "Email is required";
@@ -77,14 +76,15 @@ function onSubmit() {
           </template>
         </q-input>
         <q-select
-          v-model="registerFormData.bloodGroup"
-          :options="bloodGroups"
+          v-model="registerFormData.blood_group"
+          :options="bloodGroupOptions"
           label="Blood Group"
           outlined
           dense
           color="red-5"
           bg-color="white"
           :rules="[(val) => !!val || 'Blood Group is required']"
+          emit-value
         >
           <template #prepend>
             <Icon name="mdi:water-outline" class="text-red-5" size="18px" />

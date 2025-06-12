@@ -28,4 +28,9 @@ export default defineNuxtConfig({
   imports: {
     dirs: ["composables", "utils", "types"],
   },
+
+  plugins: [
+    '~/plugins/httpClient',
+  ]
+  
 });

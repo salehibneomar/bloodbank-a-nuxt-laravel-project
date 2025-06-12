@@ -3,16 +3,17 @@ definePageMeta({
   name: 'auth-login',
   title: 'Login',
   requireAuth: false,
+  layout: 'global'
 })
 
 useHead({
   title: 'Login | BloodBank',
 });
 
-const authFormData: AuthLogin = {
+const authFormData = ref<AuthLogin>({
   email: '',
-  password: '',
-}
+  password: ''
+})
 
 const emailRule = (val: string): boolean | string => {
   if (!val) return 'Email is required'
