@@ -2,7 +2,7 @@
 
 namespace App\Services;
 use App\Enums\BloodGroup;
-use App\Enums\UserRole;
+// use App\Enums\UserRole;
 use App\Enums\AdminCache;
 
 class MetaInformationService
@@ -18,7 +18,7 @@ class MetaInformationService
         if ($data === null) {
             $data = [
                 'blood_groups' => BloodGroup::mappedBloodGroup(),
-                'user_roles' => UserRole::allRoles(),
+                // 'user_roles' => UserRole::allRoles(),
             ];
             dispatch(function () use ($cacheTag, $cacheKey, $data, $cacheDuration) {
                 cache()->tags($cacheTag)->put($cacheKey, $data, $cacheDuration);
