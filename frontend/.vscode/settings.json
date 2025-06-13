@@ -3,8 +3,9 @@
   "eslint.options": {
     "extensions": [".js", ".ts", ".vue"]
   },
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint", 
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "eslint.useFlatConfig": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   }
