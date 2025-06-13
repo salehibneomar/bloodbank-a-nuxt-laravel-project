@@ -1,7 +1,9 @@
 import { useRemoteApi } from '~/composables/useRemoteApi'
 
-export default defineEventHandler(async () => {
+export default defineEventHandler(async (event) => {
 	const httpClient = useRemoteApi()
-	const { data: response } = await httpClient.get('/donors')
+	const params = getQuery(event)
+	console.log('params', params)
+	const { data: response } = await httpClient.get('/donors', { params })
 	return response
 })
