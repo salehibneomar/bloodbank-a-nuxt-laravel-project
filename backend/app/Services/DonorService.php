@@ -25,20 +25,22 @@ class DonorService
         $bloodGroup = ($request->has('blood_group') && isset($request->blood_group) && isset(BloodGroup::mappedBloodGroup()[$request->blood_group])) ? BloodGroup::mappedBloodGroup()[$request->blood_group] : null;
 
         $listKey = "donors:view:page:{$page}:per_page:{$perPage}" . ($bloodGroup !== null ? ":blood_group:{$bloodGroup}" : "");
-        $totalKey = "donors:view:total";
+        $totalKey = "donors:view:total" . ($bloodGroup !== null ? ":blood_group:{$bloodGroup}" : "");
         $commonTag = DonorCache::LIST_TAG->value;
 
         $data = cache()->tags([$commonTag])->get($listKey);
         $total = cache()->tags([$commonTag])->get($totalKey);
 
         if ($data === null || $total === null) {
-            $query = DB::table('donor_view');
-            $query = $bloodGroup ? $query->where('blood_group', $bloodGroup) : $query;
+            $baseQuery = DB::table('donor_view');
+            if ($bloodGroup) {
+                $baseQuery = $baseQuery->where('blood_group', $bloodGroup);
+            }
+            $total = $baseQuery->count();
 
-            $data = $query->forPage($page, $perPage)
+            $data = $baseQuery->forPage($page, $perPage)
                 ->get()
                 ->toArray();
-            $total = $query->count();
 
             dispatch(new CacheDonorListJob($listKey, $totalKey, $data, $total));
         }
