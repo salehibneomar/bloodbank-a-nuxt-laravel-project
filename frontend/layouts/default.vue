@@ -18,7 +18,10 @@
 				<q-space />
 				<q-btn round flat size="sm" class="q-mx-sm">
 					<q-avatar size="36px">
-						<img src="https://cdn.quasar.dev/img/avatar.png" alt="User Avatar" />
+						<img
+							src="https://ui-avatars.com/api/?name=John+Doe&color=ffffff&background=ff7675"
+							alt="User Avatar"
+						/>
 					</q-avatar>
 					<q-menu anchor="bottom right" self="top right" dense>
 						<q-list style="min-width: 140px" dense>
