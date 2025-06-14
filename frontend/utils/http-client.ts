@@ -55,7 +55,8 @@ let remoteInstance: AxiosInstance | null = null
 export function localHttpClient(): AxiosInstance {
 	if (localInstance) return localInstance
 
-	const baseURL = '/api/'
+	const siteUrl = import.meta.env.VITE_SITE_URL
+	const baseURL = siteUrl ? `${siteUrl}/api/` : `${siteUrl}/api/`
 
 	localInstance = createHttpClient(baseURL, true)
 	return localInstance

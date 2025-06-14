@@ -21,6 +21,7 @@ class DonorFactory extends Factory
             'password' => Hash::make('123456'),
             'remember_token' => Str::random(10),
             'role' => UserRole::Donor->value,
+            'phone' => fake()->phoneNumber(),
             'is_active' => fake()->randomElement([true, false]),
         ];
     }

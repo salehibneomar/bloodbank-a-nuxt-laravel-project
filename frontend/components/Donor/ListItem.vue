@@ -3,20 +3,19 @@
 		donor: Donor
 	}
 	const { donor } = defineProps<Props>()
+	const emit = defineEmits(['view-details'])
 </script>
 
 <template>
 	<q-item>
-		<!-- Blood Group Badge -->
-		<div class="flex flex-center q-mr-sm" style="min-width: 64px; min-height: 64px">
+		<div class="flex flex-center q-mr-md" style="min-width: 64px; min-height: 64px">
 			<div
 				class="bg-red-1 text-red-5 text-h6 text-weight-bold flex flex-center"
-				style="width: 48px; height: 48px; border-radius: 12px"
+				style="width: 55px; height: 55px; border-radius: 12px"
 			>
 				{{ donor.blood_group }}
 			</div>
 		</div>
-		<!-- Donor Info -->
 		<q-item-section>
 			<div class="text-subtitle1 text-grey-10 text-weight-bold">
 				{{ donor.name }}
@@ -60,7 +59,15 @@
 			</div>
 		</q-item-section>
 		<q-item-section side>
-			<q-btn flat round dense aria-label="View Details" text-color="red-4" size="xs">
+			<q-btn
+				flat
+				round
+				dense
+				aria-label="View Details"
+				text-color="red-4"
+				size="xs"
+				@click.stop="emit('view-details', donor?.id)"
+			>
 				<Icon name="mdi:information-outline" size="22px" />
 				<q-tooltip> View Details </q-tooltip>
 			</q-btn>
