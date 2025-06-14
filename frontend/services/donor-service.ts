@@ -5,7 +5,12 @@ export const useDonorService = () => {
 		return await client.get(`/${MODEL}`, { params: query })
 	}
 
+	const getById = async (id: string | number) => {
+		return await client.get(`/${MODEL}/${id}/information`)
+	}
+
 	return {
-		getAll
+		getAll,
+		getById
 	}
 }
