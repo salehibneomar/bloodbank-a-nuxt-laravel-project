@@ -39,6 +39,7 @@ Route::prefix('donors')
         ->name('admin.')
         ->group(function (){
             Route::put('change-status/{id}', 'changeUserStatus')->name('change-status');
+            Route::get('manage', 'manageDonors')->name('manage');
         });
 });
 

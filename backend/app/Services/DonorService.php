@@ -32,13 +32,22 @@ class DonorService
         $total = cache()->tags([$commonTag])->get($totalKey);
 
         if ($data === null || $total === null) {
-            $baseQuery = DB::table('donor_view');
-            if ($bloodGroup) {
-                $baseQuery = $baseQuery->where('blood_group', $bloodGroup);
-            }
-            $total = $baseQuery->count();
+            $query = DB::table('donor_view')
+                ->select([
+                    'id', 'name', 'email', 'phone',
+                    'address', 'blood_group', 'is_available',
+                    'last_donation_date', 'profession', 'religion',
+                    'age'
+                ])
+                ->where('is_active', true);
 
-            $data = $baseQuery->forPage($page, $perPage)
+            if ($bloodGroup) {
+                $query = $query->where('blood_group', $bloodGroup);
+            }
+
+            $total = $query->count();
+
+            $data = $query->forPage($page, $perPage)
                 ->get()
                 ->toArray();
 

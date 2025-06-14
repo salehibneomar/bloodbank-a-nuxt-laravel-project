@@ -8,6 +8,8 @@ use App\Jobs\InvalidateDonorCacheJob;
 use Illuminate\Support\Facades\DB;
 use App\Enums\AdminCache;
 use App\Jobs\AdminDashboardCacheJob;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminControlService
 {
@@ -15,6 +17,20 @@ class AdminControlService
     private function isSameUser(int $userId): bool
     {
         return Auth::user()->id === $userId;
+    }
+
+    public function manageDonors(Request $request) : LengthAwarePaginator
+    {
+        $perPage = $request->get('per_page', 10);
+        $email = $request->get('email');
+
+        $query = DB::table('donor_view');
+
+        if ($email) {
+            $query = $query->where('email', 'LIKE', '%' . $email . '%');
+        }
+
+        return $query->paginate($perPage);
     }
 
     public function getDashboardData(): array
