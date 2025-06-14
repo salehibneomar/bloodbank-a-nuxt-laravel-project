@@ -15,7 +15,7 @@ return new class extends Migration
             AS
             SELECT
 
-            u.id, u.name, u.email, u.phone,
+            u.id, u.name, u.email, u.phone, u.is_active,
 
             di.address, di.blood_group,
             di.is_available, di.last_donation_date,
@@ -24,7 +24,7 @@ return new class extends Migration
 
             FROM users u, donor_information di
 
-            WHERE u.id = di.user_id AND u.role = "donor" AND u.is_active = 1
+            WHERE u.id = di.user_id AND u.role = "donor"
             ORDER BY u.name ASC
         ');
     }

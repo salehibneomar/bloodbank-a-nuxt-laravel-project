@@ -22,6 +22,16 @@ class AdminControlController extends Controller
         $this->adminControlService = $adminControlService;
     }
 
+    public function manageDonors(Request $request): JsonResponse
+    {
+        try {
+            $data = $this->adminControlService->manageDonors($request);
+            return $this->listDataResponse($data);
+        } catch (Exception $e) {
+            return $this->errorResponse($e);
+        }
+    }
+
     public function getDashboardData(): JsonResponse
     {
         try {

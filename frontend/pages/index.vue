@@ -11,6 +11,7 @@
 		title: 'Welcome to BloodBank'
 	})
 
+	const router = useRouter()
 	const donorStore = useDonorStore()
 
 	const pagingData = ref<PagingData>({
@@ -26,6 +27,10 @@
 	const openDonorDetails = ref(false)
 	const donorDetailsLoading = ref(false)
 
+	onMounted(() => {
+		isLoading.value = false
+	})
+
 	const syncPagingData = (response: PagingData | null) => {
 		if (!response) return
 		const { current_page, per_page, last_page, from, to, total } = response
@@ -35,10 +40,6 @@
 		donorStore.getAll(pagingData.value)
 	)
 	syncPagingData(response.value)
-
-	onMounted(() => {
-		isLoading.value = false
-	})
 
 	const onPageChange = async (page: number) => {
 		isLoading.value = true
@@ -50,15 +51,20 @@
 			donorStore.getAll({ page, ...pagingData.value })
 		)
 		syncPagingData(response.value)
-
 		isLoading.value = false
 	}
+
 	const onViewDonorDetails = async (id: number | string) => {
-		console.log('View donor details for ID:', id)
 		openDonorDetails.value = true
 		donorDetailsLoading.value = true
 		await donorStore.getById(id)
 		donorDetailsLoading.value = false
+	}
+
+	const onSelectBloodGroup = async (bloodGroup: BloodGroup) => {
+		if (bloodGroup?.value) {
+			await router.push(`/blood-group/${bloodGroup.value}`)
+		}
 	}
 </script>
 
@@ -84,9 +90,11 @@
 							color="red-5"
 							bg-color="white"
 							clearable
-							emit-value
+							emit-object
 							behavior="menu"
 							style="min-width: 200px"
+							options-dense
+							@update:model-value="onSelectBloodGroup"
 						>
 							<template #prepend>
 								<Icon name="mdi:water-outline" class="text-red-5" size="18px" />

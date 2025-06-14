@@ -1,10 +1,10 @@
 export const bloodGroups: BloodGroup[] = [
-	{ label: 'A+', value: 'A+' },
-	{ label: 'A-', value: 'A-' },
-	{ label: 'B+', value: 'B+' },
-	{ label: 'B-', value: 'B-' },
-	{ label: 'AB+', value: 'AB+' },
-	{ label: 'AB-', value: 'AB-' },
-	{ label: 'O+', value: 'O+' },
-	{ label: 'O-', value: 'O-' }
+	{ label: 'A+', value: 'Ave' },
+	{ label: 'A-', value: 'Aneg' },
+	{ label: 'B+', value: 'Bve' },
+	{ label: 'B-', value: 'Bneg' },
+	{ label: 'AB+', value: 'ABve' },
+	{ label: 'AB-', value: 'ABneg' },
+	{ label: 'O+', value: 'Ove' },
+	{ label: 'O-', value: 'Oneg' }
 ]
