@@ -27,7 +27,7 @@ class DonorRequest extends BaseRequest
             'address' => 'nullable|string|max:255',
             'blood_group' => $requiredOrSometimes."|string|in:" . implode(',', BloodGroup::allGroups()),
             'is_available' => 'boolean',
-            'last_donation_date' => 'nullable|date|before_or_equal:today',
+            'last_donation_date' => 'nullable|date|before_or_equal:tomorrow',
             'profession' => 'nullable|string|max:255',
             'religion' => 'nullable|string|max:255',
             'age' => 'nullable|integer|min:0|max:255',
