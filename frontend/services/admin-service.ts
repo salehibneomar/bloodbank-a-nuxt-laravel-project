@@ -1,5 +1,5 @@
 export const useAdminService = () => {
-	const client = useLocalApi()
+	const client = useHttpClient()
 
 	const getDashboardData = async (query: QueryObject) => {
 		return await client.get(`/admin/dashboard`, { params: query })

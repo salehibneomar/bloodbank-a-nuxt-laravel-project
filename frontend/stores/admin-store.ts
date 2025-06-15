@@ -1,13 +1,9 @@
 export const useAdminStore = defineStore('adminStore', () => {
 	const adminService = useAdminService()
 	const donors = ref([])
-	const dashboardData = ref<AdminDashboardData>({
-		total_users: 0,
-		active_users: 0,
-		inactive_users: 0
-	})
+	const dashboardData = ref<AdminDashboardData | null>(null)
 
-	async function getDashboardData(query = {} as QueryObject) {
+	const getDashboardData = async (query = {} as QueryObject) => {
 		let response: AdminDashboardData = {} as AdminDashboardData
 		try {
 			const {
@@ -21,13 +17,13 @@ export const useAdminStore = defineStore('adminStore', () => {
 				response = data
 			}
 		} catch (error) {
-			console.error('Error fetching dashboard data:', error)
+			console.error('Error fetching dashboard data.', error)
 		}
 
 		return response
 	}
 
-	async function getAllDonors(query = {} as QueryObject) {
+	const getAllDonors = async (query = {} as QueryObject) => {
 		let response: any | null = null
 		try {
 			const {

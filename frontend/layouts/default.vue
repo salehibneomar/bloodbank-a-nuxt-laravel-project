@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	const authStore = useAuthStore()
 	const authUserRole = computed(() => authStore.authUserRole)
-	const logout = async () => {
-		//TODO:: Implement logout functionality
+	const handleLogout = async () => {
+		await authStore.logout()
 	}
 </script>
 
@@ -42,7 +42,7 @@
 								</q-item>
 							</template>
 							<q-separator />
-							<q-item class="text-grey-8" clickable v-close-popup @click="logout" dense>
+							<q-item class="text-grey-8" clickable v-close-popup @click.stop="handleLogout" dense>
 								<q-item-section avatar>
 									<q-icon name="logout" />
 								</q-item-section>

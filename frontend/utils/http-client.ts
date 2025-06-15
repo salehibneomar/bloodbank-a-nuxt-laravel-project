@@ -24,6 +24,16 @@ function createHttpClient(baseURL: string, showToast: boolean = true): AxiosInst
 		}
 	})
 
+	instance.interceptors.request.use((config) => {
+		try {
+			const authStore = useAuthStore()
+			if (authStore.hasAuthUser && authStore.authUserToken) {
+				config.headers.Authorization = `Bearer ${authStore.authUserToken}`
+			}
+		} catch (error) {}
+		return config
+	})
+
 	instance.interceptors.response.use(
 		(response: AxiosResponse) => {
 			const HTTP_METHOD = response.config.method?.toUpperCase() ?? ''
@@ -39,19 +49,14 @@ function createHttpClient(baseURL: string, showToast: boolean = true): AxiosInst
 			let message = errorData?.statusMessage || 'An error occurred!'
 
 			if (errorData?.status?.message) {
-				console.log('1, CULPRIT')
 				message = errorData.status.message
-			} else if (errorData?.message && +errorData?.statusCode !== 500) {
-				console.log('2, CULPRIT')
-				message = errorData.message
-				console.log('2.0, CULPRIT', message)
-				const messageData = JSON.parse(JSON.stringify(message))
-				if (typeof messageData === 'object') {
-					console.log('2.1, CULPRIT')
-					message = Object.values(messageData).join(', ')
-				}
+				try {
+					const messageData = JSON.parse(message)
+					if (typeof messageData === 'object') {
+						message = Object.values(messageData).join(', ')
+					}
+				} catch (e) {}
 			} else if (error.code === 'ERR_NETWORK') {
-				console.log('3, CULPRIT')
 				message = 'Network error!'
 			}
 
@@ -64,24 +69,13 @@ function createHttpClient(baseURL: string, showToast: boolean = true): AxiosInst
 	return instance
 }
 
-let localInstance: AxiosInstance | null = null
-let remoteInstance: AxiosInstance | null = null
+let axiosInstance: AxiosInstance | null = null
 
-export function localHttpClient(): AxiosInstance {
-	if (localInstance) return localInstance
-
-	const siteUrl = import.meta.env.VITE_SITE_URL
-	const baseURL = siteUrl ? `${siteUrl}/api/` : `${siteUrl}/api/`
-
-	localInstance = createHttpClient(baseURL, true)
-	return localInstance
-}
-
-export function remoteHttpClient(): AxiosInstance {
-	if (remoteInstance) return remoteInstance
+export function httpClient(): AxiosInstance {
+	if (axiosInstance) return axiosInstance
 
 	const baseURL = import.meta.env.VITE_API_BASE_URL as string
 
-	remoteInstance = createHttpClient(baseURL)
-	return remoteInstance
+	axiosInstance = createHttpClient(baseURL)
+	return axiosInstance
 }
