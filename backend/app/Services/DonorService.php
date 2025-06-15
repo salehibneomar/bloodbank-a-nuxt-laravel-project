@@ -19,10 +19,10 @@ class DonorService
 {
     public function getAll(Request $request): LengthAwarePaginator
     {
-        $params = $request->all();
-        $perPage = $params['per_page'] ?? 20;
-        $page = $params['page'] ?? 1;
-        $bloodGroup = ($request->has('blood_group') && isset($request->blood_group) && isset(BloodGroup::mappedBloodGroup()[$request->blood_group])) ? BloodGroup::mappedBloodGroup()[$request->blood_group] : null;
+        $perPage = $request->get('per_page', 20);
+        $page = $request->get('page', 1);
+        $bloodGroupParam = $request->get('blood_group');
+        $bloodGroup = ($bloodGroupParam && isset(BloodGroup::mappedBloodGroup()[$bloodGroupParam])) ? BloodGroup::mappedBloodGroup()[$bloodGroupParam] : null;
 
         $listKey = "donors:view:page:{$page}:per_page:{$perPage}" . ($bloodGroup !== null ? ":blood_group:{$bloodGroup}" : "");
         $totalKey = "donors:view:total" . ($bloodGroup !== null ? ":blood_group:{$bloodGroup}" : "");
