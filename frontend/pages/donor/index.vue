@@ -2,7 +2,8 @@
 	definePageMeta({
 		name: 'donor-dashboard',
 		title: 'Donor Dashboard',
-		requireAuth: true
+		requireAuth: true,
+		roles: ['donor']
 	})
 
 	useHead({

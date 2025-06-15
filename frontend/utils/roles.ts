@@ -6,3 +6,7 @@ export const roleRootRoutes: Record<Role, string> = {
 	donor: '/donor',
 	admin: '/admin'
 }
+
+export const hasRoleMatch = (allowedRoles: Role[], role: Role): boolean => {
+	return allowedRoles.includes(role)
+}
