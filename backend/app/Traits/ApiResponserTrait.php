@@ -52,11 +52,11 @@ trait ApiResponserTrait
         $debug = config('app.debug');
         $statusArr = [
             'code' => $status->value,
-            'message' => $status->message(),
+            'message' => $customMessage ?? $e->getMessage(),
+            'status_message' => $status->message()
         ];
         if ($debug) {
             $statusArr['trace'] = basename($e->getFile()) . ': ' . $e->getLine();
-            $statusArr['trace_message'] = $customMessage ?? $e->getMessage();
         }
         return response()->json([
             'status' => $statusArr,

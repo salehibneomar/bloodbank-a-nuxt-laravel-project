@@ -13,11 +13,25 @@ export default defineNuxtConfig({
 		'pinia-plugin-persistedstate/nuxt',
 		'nuxt-quasar-ui'
 	],
-
 	quasar: {
 		plugins: ['Dialog', 'Loading', 'LoadingBar', 'Notify', 'Dark'],
 		extras: {
 			font: 'roboto-font'
+		},
+		config: {
+			notify: {
+				timeout: 2000,
+				progress: true,
+				actions: [
+					{
+						icon: 'close',
+						color: 'white',
+						round: true,
+						flat: true,
+						size: 'sm'
+					}
+				]
+			}
 		}
 	},
 
