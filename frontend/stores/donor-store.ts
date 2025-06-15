@@ -1,9 +1,10 @@
 export const useDonorStore = defineStore('donorStore', () => {
 	const donorService = useDonorService()
-	const donors = ref([])
-	const donor = ref({})
+	const donors = ref<Donor[]>([])
+	const donor = ref<Donor | null>(null)
+	const profileData = ref<Donor | null>(null)
 
-	async function getAll(query = {} as QueryObject) {
+	const getAll = async (query = {} as QueryObject) => {
 		let response: any | null = null
 		try {
 			const {
@@ -23,8 +24,9 @@ export const useDonorStore = defineStore('donorStore', () => {
 		return response
 	}
 
-	async function getById(id: string | number) {
+	const getById = async (id: string | number) => {
 		let response: any | null = null
+		donor.value = response
 		try {
 			const {
 				data: {
@@ -37,11 +39,51 @@ export const useDonorStore = defineStore('donorStore', () => {
 				response = data
 			}
 		} catch (error) {
-			console.error('Error fetching donors:', error)
+			console.error('Error fetching donor:', error)
 		}
 
 		return response
 	}
 
-	return { donors, donor, getAll, getById }
+	const profile = async () => {
+		let response: any | null = null
+		try {
+			const {
+				data: {
+					status: { code },
+					data
+				}
+			} = await donorService.profile()
+			if (+code === 200) {
+				profileData.value = data
+				response = data
+			}
+		} catch (error) {
+			console.error('Error fetching profile:', error)
+		}
+
+		return response
+	}
+
+	const updateProfile = async (payload: Donor) => {
+		let response: any | null = null
+		try {
+			const {
+				data: {
+					status: { code },
+					data
+				}
+			} = await donorService.updateProfile(payload)
+			if (+code === 200) {
+				profileData.value = { ...data, ...payload }
+				response = data
+			}
+		} catch (error) {
+			console.error('Error updating profile:', error)
+		}
+
+		return response
+	}
+
+	return { donors, donor, profileData, getAll, getById, profile, updateProfile }
 })

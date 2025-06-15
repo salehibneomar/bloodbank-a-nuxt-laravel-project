@@ -13,6 +13,7 @@
 	const isLoading = ref(true)
 
 	const adminStore = useAdminStore()
+	const authStore = useAuthStore()
 
 	onMounted(async () => {
 		await adminStore.getDashboardData()
@@ -29,13 +30,15 @@
 				<div class="bg-red-1 rounded-borders q-pa-xl q-mb-lg border-section flex items-center">
 					<Icon name="mdi:view-dashboard" size="40px" class="text-red-5 q-mr-md" />
 					<div>
-						<div class="text-h5 text-weight-bold text-grey-10">Welcome, Admin!</div>
+						<div class="text-h5 text-weight-bold text-grey-10">
+							Welcome, {{ authStore.authUser?.name }}!
+						</div>
 						<div class="text-body2 text-grey-7 text-caption">Here is your system overview.</div>
 					</div>
 				</div>
 
 				<!-- Info Cards -->
-				<div class="row q-col-gutter-md">
+				<div v-if="adminStore.dashboardData" class="row q-col-gutter-md">
 					<div class="col-12 col-md-4 flex">
 						<div
 							class="bg-white rounded-borders border-section q-pa-lg flex column items-center text-center info-card-fill"

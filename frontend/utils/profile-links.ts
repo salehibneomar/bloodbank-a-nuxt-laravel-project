@@ -8,11 +8,25 @@ interface ProfileLink {
 
 export const profileLinks: ProfileLink[] = [
 	{
-		label: 'Profile',
+		label: 'Dashboard',
+		route: '/admin',
+		roles: ['admin'],
+		icon: 'dashboard',
+		slug: 'admin-dashboard'
+	},
+	{
+		label: 'Home',
+		route: '/donor',
+		roles: ['donor'],
+		icon: 'home',
+		slug: 'donor-home'
+	},
+	{
+		label: 'Edit Profile',
 		route: '/donor/profile',
 		roles: ['donor'],
 		icon: 'person',
-		slug: 'profile'
+		slug: 'edit-profile'
 	},
 	// {
 	// 	label: 'Update Password',

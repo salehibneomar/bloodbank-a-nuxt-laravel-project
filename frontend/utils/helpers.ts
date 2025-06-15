@@ -15,9 +15,10 @@ export const objectToApiQuery = (query: QueryObject): string => {
 
 export const utcToLocalDateTime = (
 	utcString: string | null,
-	options?: Intl.DateTimeFormatOptions
+	options?: Intl.DateTimeFormatOptions,
+	locale: string = 'en-US'
 ): string | null => {
 	if (!utcString) return null
 	const date = new Date(utcString)
-	return date.toLocaleString('en-US', options)
+	return date.toLocaleString(locale, options)
 }

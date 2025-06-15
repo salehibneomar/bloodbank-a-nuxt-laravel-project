@@ -8,43 +8,80 @@
 		roles: ['donor']
 	})
 
-	const form = ref({
-		name: '',
-		email: '',
-		phone: '',
+	useHead({
+		title: 'My Profile'
+	})
+
+	const donorStore = useDonorStore()
+
+	const formData = ref({
 		address: '',
-		blood_group: '',
-		is_available: false,
-		last_donation_date: '',
-		profession: '',
-		religion: '',
 		age: '',
-		medical_conditions: ''
+		blood_group: '',
+		email: '',
+		id: '',
+		is_available: '',
+		last_donation_date: '',
+		medical_conditions: '',
+		name: '',
+		phone: '',
+		profession: '',
+		religion: ''
 	})
 
 	const bloodGroupOptions = bloodGroups
 	const showDatePicker = ref(false)
+
+	const isLoading = ref(true)
 
 	const emailRule = (val: string): boolean | string => {
 		if (!val) return 'Email is required'
 		return isValidEmail(val) || 'Valid email required'
 	}
 
-	function saveProfile() {
-		// TODO: Implement save logic (API call or store update)
+	onMounted(async () => {
+		!donorStore.profileData && (await donorStore.profile())
+		isLoading.value = false
+		populateFormData()
+	})
+
+	const populateFormData = () => {
+		if (donorStore.profileData) {
+			formData.value = {
+				...donorStore.profileData,
+				is_available: Boolean(+donorStore.profileData?.is_available),
+				last_donation_date:
+					utcToLocalDateTime(
+						donorStore.profileData?.last_donation_date,
+						{
+							year: 'numeric',
+							month: '2-digit',
+							day: '2-digit'
+						},
+						'sv-SE'
+					) || ''
+			} as any
+		}
+	}
+	const handleProfileUpdate = async () => {
+		const updateData = {
+			...formData.value
+		}
+		await donorStore.updateProfile(updateData as any)
 	}
 </script>
 
 <template lang="">
-	<div class="row justify-center">
+	<LoadingState v-if="isLoading" />
+	<div v-else class="row justify-center">
 		<div class="col-md-7 col-sm-10 col-12">
-			<q-card class="q-pa-xl bg-white rounded-borders" flat>
+			<q-card v-if="donorStore.profileData" class="q-pa-xl bg-white rounded-borders" flat>
 				<div class="text-h5 text-weight-bold text-grey-10 q-mb-md text-center">Profile</div>
-				<q-form @submit.prevent="saveProfile">
+				<q-form @submit.prevent="handleProfileUpdate">
 					<div class="row q-col-gutter-md q-gutter-y-none">
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-input
-								v-model="form.name"
+								v-model="formData.name"
 								label="Name"
 								outlined
 								dense
@@ -56,7 +93,7 @@
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-input
-								v-model="form.email"
+								v-model="formData.email"
 								label="Email"
 								type="email"
 								outlined
@@ -69,7 +106,7 @@
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-input
-								v-model="form.phone"
+								v-model="formData.phone"
 								label="Phone"
 								type="tel"
 								outlined
@@ -81,7 +118,7 @@
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-input
-								v-model="form.address"
+								v-model="formData.address"
 								label="Address"
 								outlined
 								dense
@@ -92,7 +129,7 @@
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-select
-								v-model="form.blood_group"
+								v-model="formData.blood_group"
 								:options="bloodGroupOptions"
 								label="Blood Group"
 								outlined
@@ -100,19 +137,24 @@
 								color="red-5"
 								bg-color="white"
 								emit-value
-								option-value="value"
+								map-options
+								option-value="label"
 								option-label="label"
 								:rules="[(val) => !!val || 'Blood group is required']"
 								hide-bottom-space
 							/>
 						</div>
 						<div class="col-12 col-md-6 flex items-center q-mb-xs">
-							<q-toggle v-model="form.is_available" label="Available for Donation" color="red-6" />
+							<q-toggle
+								v-model="formData.is_available"
+								label="Available for Donation"
+								color="red-6"
+							/>
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<div @click="showDatePicker = true" style="width: 100%">
 								<q-input
-									v-model="form.last_donation_date"
+									v-model="formData.last_donation_date"
 									label="Last Donation Date"
 									outlined
 									dense
@@ -129,7 +171,7 @@
 							</div>
 							<q-dialog v-model="showDatePicker">
 								<q-date
-									v-model="form.last_donation_date"
+									v-model="formData.last_donation_date"
 									mask="YYYY-MM-DD"
 									color="red-5"
 									@update:model-value="showDatePicker = false"
@@ -138,7 +180,7 @@
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-input
-								v-model="form.profession"
+								v-model="formData.profession"
 								label="Profession"
 								outlined
 								dense
@@ -149,7 +191,7 @@
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-input
-								v-model="form.religion"
+								v-model="formData.religion"
 								label="Religion"
 								outlined
 								dense
@@ -160,7 +202,7 @@
 						</div>
 						<div class="col-12 col-md-6 q-mb-xs">
 							<q-input
-								v-model="form.age"
+								v-model="formData.age"
 								label="Age"
 								type="number"
 								min="0"
@@ -173,7 +215,7 @@
 						</div>
 						<div class="col-12 q-mb-xs">
 							<q-input
-								v-model="form.medical_conditions"
+								v-model="formData.medical_conditions"
 								label="Medical Conditions"
 								outlined
 								dense

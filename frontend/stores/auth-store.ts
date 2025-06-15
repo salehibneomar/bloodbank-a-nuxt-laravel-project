@@ -30,6 +30,23 @@ export const useAuthStore = defineStore(
 			return response
 		}
 
+		const logout = async () => {
+			let response: any | null = null
+			try {
+				const {
+					data: { status, data }
+				} = await authService.logout()
+				if (status.code === 200) {
+					await reset()
+					await navigateTo('/')
+				}
+				response = data
+			} catch (error) {
+				console.error('Logout failed:', error)
+			}
+			return response
+		}
+
 		const donorRegister = async (payload: AuthDonor) => {
 			let response: Donor | null = null
 			try {
@@ -47,6 +64,13 @@ export const useAuthStore = defineStore(
 			return response
 		}
 
+		const reset = async () => {
+			authUser.value = null
+			authUserToken.value = null
+			authUserRole.value = null
+			hasAuthUser.value = false
+		}
+
 		return {
 			registeredDonor,
 			authUser,
@@ -54,7 +78,8 @@ export const useAuthStore = defineStore(
 			authUserRole,
 			hasAuthUser,
 			donorRegister,
-			login
+			login,
+			logout
 		}
 	},
 	{
