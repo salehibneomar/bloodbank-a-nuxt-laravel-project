@@ -3,7 +3,8 @@
 		name: 'donor-manage',
 		title: 'Manage Donors',
 		requireAuth: true,
-		layout: 'default'
+		layout: 'default',
+		roles: ['admin']
 	})
 	useHead({
 		title: 'Manage Donors - BloodBank'

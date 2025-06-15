@@ -14,12 +14,12 @@ export const profileLinks: ProfileLink[] = [
 		icon: 'person',
 		slug: 'profile'
 	},
-	{
-		label: 'Update Password',
-		route: '/update-password',
-		roles: ['donor', 'admin'],
-		icon: 'lock'
-	},
+	// {
+	// 	label: 'Update Password',
+	// 	route: '/update-password',
+	// 	roles: ['donor', 'admin'],
+	// 	icon: 'lock'
+	// },
 	{
 		label: 'Manage Donors',
 		route: '/donor/manage',

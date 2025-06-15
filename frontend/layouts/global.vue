@@ -5,7 +5,7 @@
 				<NuxtLink to="/" style="text-decoration: none">
 					<q-toolbar-title class="text-h5 text-weight-bold flex items-center cursor-pointer">
 						<Icon name="mdi:blood-bag" class="q-mr-sm text-red-5" size="28px" />
-						<span class="text-grey-10 q-pt-xs">BloodBank</span>
+						<span class="text-grey-10 q-pt-xs">{{ APP_NAME }}</span>
 					</q-toolbar-title>
 				</NuxtLink>
 				<q-space />
@@ -38,7 +38,7 @@
 		</q-page-container>
 
 		<q-footer class="text-center bg-grey-2 q-pa-md shadow-1" style="border-top: 1px solid #f5f5f5">
-			<span class="text-grey-7">© {{ new Date().getFullYear() }} BloodBank</span>
+			<span class="text-grey-7">© {{ `${new Date().getFullYear()} ${APP_NAME}` }}</span>
 		</q-footer>
 	</q-layout>
 </template>

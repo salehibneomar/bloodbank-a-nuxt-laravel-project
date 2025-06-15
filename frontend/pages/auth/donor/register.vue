@@ -3,7 +3,7 @@
 		name: 'auth-donor-register',
 		title: 'Donor Registration',
 		requireAuth: false,
-		layout: 'global'
+		middleware: 'guest'
 	})
 
 	useHead({
@@ -63,7 +63,7 @@
 		>
 			<div class="text-center q-mb-lg">
 				<Icon name="mdi:blood-bag" class="text-red-5" size="40px" />
-				<div class="text-h5 text-weight-bold text-grey-10 q-mt-sm">BloodBank</div>
+				<div class="text-h5 text-weight-bold text-grey-10 q-mt-sm">{{ APP_NAME }}</div>
 			</div>
 			<q-form @submit.prevent="handleRegister">
 				<q-input

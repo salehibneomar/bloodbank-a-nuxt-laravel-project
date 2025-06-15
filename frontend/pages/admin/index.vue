@@ -2,7 +2,8 @@
 	definePageMeta({
 		name: 'admin-dashboard',
 		title: 'Admin Dashboard',
-		requireAuth: true
+		requireAuth: true,
+		roles: ['admin']
 	})
 
 	useHead({

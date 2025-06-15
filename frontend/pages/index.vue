@@ -4,8 +4,7 @@
 	definePageMeta({
 		name: 'landing-page',
 		title: 'Landing Page',
-		requireAuth: false,
-		layout: 'global'
+		requireAuth: false
 	})
 	useHead({
 		title: 'Welcome to BloodBank'
