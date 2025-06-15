@@ -10,6 +10,9 @@
 		title: 'Donor - Registration | BloodBank'
 	})
 
+	const router = useRouter()
+	const authStore = useAuthStore()
+
 	const registerFormData = ref<AuthDonor>({
 		name: '',
 		email: '',
@@ -17,16 +20,36 @@
 		password: '',
 		password_confirmation: ''
 	})
-
 	const bloodGroupOptions = bloodGroups
+
+	const nameRule = (val: string): boolean | string => {
+		if (!val) return 'Full Name is required'
+		if (val.length < 3) return 'Full Name must be at least 3 characters'
+		return true
+	}
 
 	const emailRule = (val: string): boolean | string => {
 		if (!val) return 'Email is required'
 		return isValidEmail(val) || 'Valid email required'
 	}
 
-	function onSubmit() {
-		// TODO: Implement registration logic
+	const passwordRule = (val: string): boolean | string => {
+		if (!val) return 'Password is required'
+		if (val.length < 6) return 'Password must be at least 6 characters'
+		return true
+	}
+
+	const passwordConfirmationRule = (val: string): boolean | string => {
+		if (!val) return 'Retype your password'
+		if (val !== registerFormData.value.password) return 'Passwords do not match'
+		return true
+	}
+
+	const handleRegister = async () => {
+		const response: Donor | null = await authStore.donorRegister(registerFormData.value)
+		if (response) {
+			await router.push({ path: '/auth/login', query: { registered: response?.email } })
+		}
 	}
 </script>
 
@@ -42,15 +65,15 @@
 				<Icon name="mdi:blood-bag" class="text-red-5" size="40px" />
 				<div class="text-h5 text-weight-bold text-grey-10 q-mt-sm">BloodBank</div>
 			</div>
-			<q-form @submit.prevent="onSubmit">
+			<q-form @submit.prevent="handleRegister">
 				<q-input
-					v-model="registerFormData.name"
+					v-model.trim="registerFormData.name"
 					type="text"
 					label="Full Name"
 					outlined
 					dense
 					color="red-5"
-					:rules="[(val) => !!val || 'Full Name is required']"
+					:rules="[nameRule]"
 					bg-color="white"
 				>
 					<template #prepend>
@@ -58,7 +81,7 @@
 					</template>
 				</q-input>
 				<q-input
-					v-model="registerFormData.email"
+					v-model.trim="registerFormData.email"
 					type="email"
 					label="Email"
 					outlined
@@ -72,7 +95,7 @@
 					</template>
 				</q-input>
 				<q-select
-					v-model="registerFormData.blood_group"
+					v-model.trim="registerFormData.blood_group"
 					:options="bloodGroupOptions"
 					label="Blood Group"
 					outlined
@@ -81,6 +104,9 @@
 					bg-color="white"
 					:rules="[(val) => !!val || 'Blood Group is required']"
 					emit-value
+					map-options
+					option-value="label"
+					option-label="label"
 					options-dense
 				>
 					<template #prepend>
@@ -88,13 +114,13 @@
 					</template>
 				</q-select>
 				<q-input
-					v-model="registerFormData.password"
+					v-model.trim="registerFormData.password"
 					type="password"
 					label="Password"
 					outlined
 					dense
 					color="red-5"
-					:rules="[(val) => !!val || 'Password is required']"
+					:rules="[passwordRule]"
 					bg-color="white"
 				>
 					<template #prepend>
@@ -102,13 +128,13 @@
 					</template>
 				</q-input>
 				<q-input
-					v-model="registerFormData.password_confirmation"
+					v-model.trim="registerFormData.password_confirmation"
 					type="password"
 					label="Retype Password"
 					outlined
 					dense
 					color="red-5"
-					:rules="[(val) => !!val || 'Retype your password']"
+					:rules="[passwordConfirmationRule]"
 					bg-color="white"
 				>
 					<template #prepend>

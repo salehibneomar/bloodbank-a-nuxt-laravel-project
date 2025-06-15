@@ -33,13 +33,28 @@ function createHttpClient(baseURL: string, showToast: boolean = true): AxiosInst
 			}
 			return response
 		},
-		(error) => {
-			let message = 'An error occurred!'
-			if (error.response?.data?.status?.message) {
-				message = error.response.data.status.message
-			} else if (error.message && error.code === 'ERR_NETWORK') {
+		async (error) => {
+			const errorResponse = await error.response
+			const errorData = errorResponse?.data || {}
+			let message = errorData?.statusMessage || 'An error occurred!'
+
+			if (errorData?.status?.message) {
+				console.log('1, CULPRIT')
+				message = errorData.status.message
+			} else if (errorData?.message && +errorData?.statusCode !== 500) {
+				console.log('2, CULPRIT')
+				message = errorData.message
+				console.log('2.0, CULPRIT', message)
+				const messageData = JSON.parse(JSON.stringify(message))
+				if (typeof messageData === 'object') {
+					console.log('2.1, CULPRIT')
+					message = Object.values(messageData).join(', ')
+				}
+			} else if (error.code === 'ERR_NETWORK') {
+				console.log('3, CULPRIT')
 				message = 'Network error!'
 			}
+
 			showToast && toaster('negative', message)
 
 			return Promise.reject(error)

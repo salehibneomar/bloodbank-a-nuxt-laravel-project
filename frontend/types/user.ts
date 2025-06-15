@@ -12,6 +12,16 @@ export interface AuthDonor extends AuthRegister {
 	blood_group: string
 }
 
+export interface AuthUser {
+	id: number
+	name: string
+	email: string
+	phone: string
+	role: Role
+	is_active: number | boolean
+	created_at: string
+}
+
 export interface Donor {
 	id: number
 	name: string
