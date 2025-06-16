@@ -23,11 +23,15 @@ class DonorInformationJobForQueue implements ShouldQueue
 
     public function handle()
     {
-        $whereUserId = $this->donor ? ['user_id' => $this->donor->id] : [];
+        $donorData = Arr::only($this->updatedInformation, (new DonorInformation)->getFillable());
 
-        DonorInformation::updateOrCreate(
-            $whereUserId,
-            Arr::only($this->updatedInformation, (new DonorInformation)->getFillable())
-        );
+        if ($this->donor) {
+            DonorInformation::update(
+                ['user_id' => $this->donor->id],
+                $donorData
+            );
+        } else {
+            DonorInformation::create($donorData);
+        }
     }
 }
