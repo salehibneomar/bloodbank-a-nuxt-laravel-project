@@ -40,7 +40,7 @@
 	}
 
 	onMounted(async () => {
-		!donorStore.profileData && (await donorStore.profile())
+		await donorStore.profile()
 		isLoading.value = false
 		populateFormData()
 	})
