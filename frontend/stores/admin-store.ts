@@ -1,6 +1,6 @@
 export const useAdminStore = defineStore('adminStore', () => {
 	const adminService = useAdminService()
-	const donors = ref([])
+	const donors = ref<Donor[]>([])
 	const dashboardData = ref<AdminDashboardData | null>(null)
 
 	const getDashboardData = async (query = {} as QueryObject) => {
@@ -43,5 +43,23 @@ export const useAdminStore = defineStore('adminStore', () => {
 		return response
 	}
 
-	return { donors, dashboardData, getDashboardData, getAllDonors }
+	const changeDonorStatus = async (donorId: string | number, status: boolean, domIndex: number) => {
+		let response: any | null = null
+		try {
+			const {
+				data: {
+					status: { code },
+					data
+				}
+			} = await adminService.changeDonorStatus(donorId, status)
+			if (+code === 200) {
+				donors.value[domIndex].is_active = data?.is_active
+			}
+		} catch (error) {
+			console.error('Error changing donor status:', error)
+		}
+		return response
+	}
+
+	return { donors, dashboardData, getDashboardData, getAllDonors, changeDonorStatus }
 })
