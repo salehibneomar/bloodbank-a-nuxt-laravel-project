@@ -20,7 +20,7 @@
 		blood_group: '',
 		email: '',
 		id: '',
-		is_available: '',
+		is_available: false,
 		last_donation_date: '',
 		medical_conditions: '',
 		name: '',
@@ -44,7 +44,6 @@
 		isLoading.value = false
 		populateFormData()
 	})
-
 	const populateFormData = () => {
 		if (donorStore.profileData) {
 			formData.value = {
@@ -63,12 +62,21 @@
 			} as any
 		}
 	}
+
 	const handleProfileUpdate = async () => {
 		const updateData = {
 			...formData.value
 		}
 		await donorStore.updateProfile(updateData as any)
 	}
+
+	watch(
+		() => donorStore.profileData,
+		() => {
+			populateFormData()
+		},
+		{ deep: true }
+	)
 </script>
 
 <template lang="">

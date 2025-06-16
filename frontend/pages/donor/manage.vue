@@ -1,4 +1,6 @@
 <script setup lang="ts">
+	// import { Dialog } from 'quasar'
+
 	definePageMeta({
 		name: 'donor-manage',
 		title: 'Manage Donors',
@@ -20,7 +22,6 @@
 		per_page: 10,
 		from: 0
 	})
-
 	const isLoading = ref(true)
 	const search = ref('')
 
@@ -42,6 +43,11 @@
 		},
 		{ name: 'action', label: 'Action', field: 'action', align: 'center' as const }
 	])
+
+	const donorStatusMap = ref<Record<number, string>>({
+		1: 'Block',
+		0: 'Activate'
+	})
 
 	onMounted(async () => {
 		await getAllDonors()
@@ -76,8 +82,29 @@
 		return response
 	}
 
-	const toggleStatus = (row: any) => {
-		// TODO: Implement status toggle functionality
+	const updateDonorStatus = async (donor: Donor, domIndex: number) => {
+		const { id, is_active } = donor
+		await adminStore.changeDonorStatus(id, !is_active, domIndex)
+	}
+
+	const onClickDonorStatus = async (donor: Donor, domIndex: string | number) => {
+		Dialog.create({
+			title: `${donorStatusMap.value[Number(donor.is_active)]} Donor!`,
+			message: `Are you sure you want to change the status of <b>${donor.name}?</b>`,
+			html: true,
+			ok: {
+				label: 'Okay',
+				color: 'red-5',
+				flat: true
+			},
+			cancel: {
+				label: 'Cancel',
+				color: 'grey-5',
+				flat: true
+			}
+		}).onOk(async () => {
+			await updateDonorStatus(donor, +domIndex)
+		})
 	}
 </script>
 
@@ -114,7 +141,7 @@
 					row-key="id"
 					flat
 					bordered
-					:rows-per-page-options="[10, 20, 50]"
+					:rows-per-page-options="[10, 25, 50, 100]"
 					color="red-5"
 					:loading="isLoading"
 					server-side
@@ -151,7 +178,7 @@
 								size="sm"
 								unelevated
 								no-caps
-								@click="toggleStatus(props.row)"
+								@click.stop="onClickDonorStatus(props.row, props.pageIndex)"
 								round
 								dense
 							>
