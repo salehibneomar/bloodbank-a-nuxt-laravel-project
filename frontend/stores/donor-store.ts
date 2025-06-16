@@ -75,7 +75,13 @@ export const useDonorStore = defineStore('donorStore', () => {
 				}
 			} = await donorService.updateProfile(payload)
 			if (+code === 200) {
-				profileData.value = { ...data, ...payload }
+				profileData.value = {
+					...payload,
+					...data,
+					is_available: Boolean(
+						data.hasOwnProperty('is_available') ? +data.is_available : +payload?.is_available
+					)
+				}
 				response = data
 			}
 		} catch (error) {
