@@ -125,6 +125,8 @@ class DonorService
         dispatch(new DonorInformationJobForQueue($data, $user));
         dispatch((new InvalidateDonorCacheJob())->delay(now()->addMilliseconds(300)));
 
+        $user->forceFill(array_merge($user->toArray(), $data));
+
         return $user;
     }
 }
