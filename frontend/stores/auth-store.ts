@@ -3,9 +3,9 @@ export const useAuthStore = defineStore(
 	() => {
 		const authService = useAuthService()
 		const registeredDonor = ref<Donor | null>(null)
-		const authUser = ref<AuthUser | null>(null)
-		const authUserToken = ref<string | null>(null)
-		const authUserRole = ref<Role | null>(null)
+		const authUser = ref<AuthUser | null | false>(null)
+		const authUserToken = ref<string | null | false>(null)
+		const authUserRole = ref<Role | null | false>(null)
 		const hasAuthUser = ref<boolean>(false)
 
 		const login = async (payload: AuthLogin) => {
@@ -65,9 +65,9 @@ export const useAuthStore = defineStore(
 		}
 
 		const reset = async () => {
-			authUser.value = null
-			authUserToken.value = null
-			authUserRole.value = null
+			authUser.value = false
+			authUserToken.value = false
+			authUserRole.value = false
 			hasAuthUser.value = false
 		}
 
@@ -79,7 +79,8 @@ export const useAuthStore = defineStore(
 			hasAuthUser,
 			donorRegister,
 			login,
-			logout
+			logout,
+			reset
 		}
 	},
 	{

@@ -62,6 +62,12 @@ function createHttpClient(baseURL: string, showToast: boolean = true): AxiosInst
 
 			showToast && toaster('negative', message)
 
+			if (+errorResponse?.status === 401) {
+				const authStore = useAuthStore()
+				await authStore.reset()
+				navigateTo('/auth/login')
+			}
+
 			return Promise.reject(error)
 		}
 	)

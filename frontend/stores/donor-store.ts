@@ -3,6 +3,7 @@ export const useDonorStore = defineStore('donorStore', () => {
 	const donors = ref<Donor[]>([])
 	const donor = ref<Donor | null>(null)
 	const profileData = ref<Donor | null>(null)
+	const authStore = useAuthStore()
 
 	const getAll = async (query = {} as QueryObject) => {
 		let response: any | null = null
@@ -82,6 +83,13 @@ export const useDonorStore = defineStore('donorStore', () => {
 						data.hasOwnProperty('is_available') ? +data.is_available : +payload?.is_available
 					)
 				}
+				const { name, email, phone } = data
+				authStore.authUser = {
+					...authStore.authUser,
+					name,
+					email,
+					phone
+				} as AuthUser
 				response = data
 			}
 		} catch (error) {
