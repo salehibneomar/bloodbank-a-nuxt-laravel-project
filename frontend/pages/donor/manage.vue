@@ -109,88 +109,93 @@
 </script>
 
 <template>
-	<div class="q-pa-lg">
-		<LoadingState v-if="isLoading" />
-		<div v-else class="row justify-center">
-			<div class="col-md-8 col-12">
-				<div class="row items-center q-mb-md">
-					<div class="col text-subtitle1 text-grey-10 text-weight-bold">Manage Donors</div>
-					<div class="col-auto">
-						<q-input
-							v-model.trim="search"
-							class="q-ml-md"
-							dense
-							outlined
-							color="red-5"
-							bg-color="white"
-							placeholder="Type Email..."
-							hide-bottom-space
-							debounce="500"
-							clearable
-							@update:model-value="emailSearch"
-						>
-							<template #prepend>
-								<Icon name="mdi:magnify" class="text-red-5" />
-							</template>
-						</q-input>
-					</div>
-				</div>
-				<q-table
-					:rows="adminStore.donors"
-					:columns="columns"
-					row-key="id"
-					flat
-					bordered
-					:rows-per-page-options="[10, 25, 50, 100]"
-					color="red-5"
-					:loading="isLoading"
-					server-side
-					:pagination="{
-						page: +pagingData.current_page,
-						rowsPerPage: +pagingData.per_page,
-						rowsNumber: +pagingData.total
-					}"
-					@request="onRequest"
-				>
-					<template #body-cell-blood_group="props">
-						<q-td :props="props">
-							<q-chip color="red-1" text-color="red-8" size="sm" square>{{
-								props.row.blood_group
-							}}</q-chip>
-						</q-td>
-					</template>
-					<template #body-cell-is_active="props">
-						<q-td :props="props">
-							<q-chip
-								:color="props.row.is_active ? 'green-1' : 'red-1'"
-								:text-color="props.row.is_active ? 'green-8' : 'red-8'"
-								size="sm"
-								square
-							>
-								{{ props.row.is_active ? 'Active' : 'Blocked' }}
-							</q-chip>
-						</q-td>
-					</template>
-					<template #body-cell-action="props">
-						<q-td :props="props">
-							<q-btn
-								:color="props.row.is_active ? 'red-5' : 'green-5'"
-								size="sm"
-								unelevated
-								no-caps
-								@click.stop="onClickDonorStatus(props.row, props.pageIndex)"
-								round
+	<q-page padding>
+		<div>
+			<LoadingState v-if="isLoading" />
+			<div v-else class="row justify-center">
+				<div class="col-md-8 col-12">
+					<div class="row items-center q-mb-md">
+						<div class="col text-subtitle1 text-grey-10 text-weight-bold">Manage Donors</div>
+						<div class="col-auto">
+							<q-input
+								v-model.trim="search"
+								class="q-ml-md"
 								dense
+								outlined
+								color="red-5"
+								bg-color="white"
+								placeholder="Type Email..."
+								hide-bottom-space
+								debounce="500"
+								clearable
+								@update:model-value="emailSearch"
 							>
-								<Icon :name="props.row.is_active ? 'mdi:block' : 'mdi:check-circle'" size="18px" />
-							</q-btn>
-						</q-td>
-					</template>
-					<template #no-data>
-						<div class="text-center text-grey-6 q-pa-lg">No donors found.</div>
-					</template>
-				</q-table>
+								<template #prepend>
+									<Icon name="mdi:magnify" class="text-red-5" />
+								</template>
+							</q-input>
+						</div>
+					</div>
+					<q-table
+						:rows="adminStore.donors"
+						:columns="columns"
+						row-key="id"
+						flat
+						bordered
+						:rows-per-page-options="[10, 25, 50, 100]"
+						color="red-5"
+						:loading="isLoading"
+						server-side
+						:pagination="{
+							page: +pagingData.current_page,
+							rowsPerPage: +pagingData.per_page,
+							rowsNumber: +pagingData.total
+						}"
+						@request="onRequest"
+					>
+						<template #body-cell-blood_group="props">
+							<q-td :props="props">
+								<q-chip color="red-1" text-color="red-8" size="sm" square>{{
+									props.row.blood_group
+								}}</q-chip>
+							</q-td>
+						</template>
+						<template #body-cell-is_active="props">
+							<q-td :props="props">
+								<q-chip
+									:color="props.row.is_active ? 'green-1' : 'red-1'"
+									:text-color="props.row.is_active ? 'green-8' : 'red-8'"
+									size="sm"
+									square
+								>
+									{{ props.row.is_active ? 'Active' : 'Blocked' }}
+								</q-chip>
+							</q-td>
+						</template>
+						<template #body-cell-action="props">
+							<q-td :props="props">
+								<q-btn
+									:color="props.row.is_active ? 'red-5' : 'green-5'"
+									size="sm"
+									unelevated
+									no-caps
+									@click.stop="onClickDonorStatus(props.row, props.pageIndex)"
+									round
+									dense
+								>
+									<Icon
+										:name="props.row.is_active ? 'mdi:block' : 'mdi:check-circle'"
+										size="18px"
+									/>
+								</q-btn>
+							</q-td>
+						</template>
+						<template #no-data>
+							<div class="text-center text-grey-6 q-pa-lg">No donors found.</div>
+						</template>
+					</q-table>
+				</div>
 			</div>
 		</div>
-	</div>
+	</q-page>
 </template>
