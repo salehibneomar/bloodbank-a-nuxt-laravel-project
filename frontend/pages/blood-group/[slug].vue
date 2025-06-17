@@ -1,4 +1,6 @@
 <script setup lang="ts">
+	const DonorPageContent = defineAsyncComponent(() => import('~/components/Donor/PageContent.vue'))
+
 	const route = useRoute()
 	const donorStore = useDonorStore()
 	const bloodGroupSlug = route.params?.slug as string
@@ -21,13 +23,7 @@
 		title: `${bloodGroupInfo.label} Donors - BloodBank`
 	})
 
-	const isLoading = ref(true)
-
-	onMounted(() => {
-		isLoading.value = false
-	})
-
-	const { data: response } = await useAsyncData(`donor-list-${bloodGroupSlug}`, () =>
+	const { data: response, pending } = await useAsyncData(`donor-list-${bloodGroupSlug}`, () =>
 		donorStore.getAll({ blood_group: bloodGroupSlug })
 	)
 	const { current_page, per_page, last_page, from, to, total } = response.value
@@ -35,9 +31,9 @@
 
 <template>
 	<q-page padding>
-		<LoadingState v-if="isLoading" />
+		<LoadingState v-if="pending" />
 		<div v-else class="row justify-center">
-			<DonorSection
+			<DonorPageContent
 				:donors="donorStore.donors"
 				:selectedBloodGroup="bloodGroupInfo"
 				:initial-paging-data="{ current_page, per_page, last_page, from, to, total }"

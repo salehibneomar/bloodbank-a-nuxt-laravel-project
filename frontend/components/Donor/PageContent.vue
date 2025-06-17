@@ -13,12 +13,6 @@
 		initialPagingData: null
 	})
 
-	onMounted(() => {
-		if (props.initialPagingData) {
-			syncPagingData(props.initialPagingData)
-		}
-	})
-
 	const pagingData = ref<PagingData>({
 		current_page: 1,
 		last_page: 1,
@@ -27,7 +21,7 @@
 		per_page: 20,
 		from: 0
 	})
-	const isLoading = ref(false)
+
 	const openDonorDetails = ref(false)
 	const donorDetailsLoading = ref(false)
 
@@ -36,8 +30,12 @@
 		const { current_page, per_page, last_page, from, to, total } = response
 		pagingData.value = { ...pagingData.value, current_page, per_page, last_page, from, to, total }
 	}
+
+	if (props.initialPagingData) {
+		syncPagingData(props.initialPagingData)
+	}
+
 	const onPageChange = async (page: number) => {
-		isLoading.value = true
 		pagingData.value = {
 			...pagingData.value,
 			current_page: page
@@ -50,7 +48,7 @@
 
 		const { data: response } = await donorStore.getAll(query)
 		syncPagingData(response.value)
-		isLoading.value = false
+		window.scrollTo({ top: 0, behavior: 'smooth' })
 	}
 
 	const onViewDonorDetails = async (id: number | string) => {
