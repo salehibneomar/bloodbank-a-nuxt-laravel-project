@@ -2,7 +2,11 @@
 
 BloodBank App is designed to efficiently manage blood donors and their donation records. The system automatically tracks donor eligibility based on their last donation date and provides a seamless experience for both administrators and donors through its intuitive web interface. The application utilizes cache server to cache repetitive and data that will not be updated frequently but will be frequently fetched, ensuring optimal performance and faster response times.
 
-## 🚀 Technology Stack
+## Project Demo
+
+🎥 **[Watch Project Demo Video](https://drive.google.com/file/d/1Urh92Swf_CibUCcCGdRRFBsHFwMD3AAa/view?usp=sharing)**
+
+## �🚀 Technology Stack
 
 ### Backend (Laravel 12)
 
