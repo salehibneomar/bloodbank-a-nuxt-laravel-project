@@ -6,8 +6,8 @@ BloodBank App is designed to efficiently manage blood donors and their donation 
 
 ### Backend (Laravel 12)
 
-- **Framework**: Laravel 12 with PHP
-- **Database**: MySQL for primary data storage
+- **Framework**: Laravel 12 with PHP 8.4
+- **Database**: MySQL 8.0 for primary data storage
 - **Cache & Queue**: Redis for caching and queue management
 - **Authentication**: Laravel Sanctum for API authentication
 - **Authorization**: Role-based access control system
@@ -19,7 +19,7 @@ BloodBank App is designed to efficiently manage blood donors and their donation 
 
 ### Frontend (Nuxt 3)
 
-- **Framework**: Nuxt 3 with Server-Side Rendering (SSR)
+- **Framework**: Nuxt 3 Meta framework of Vue.js
 - **Rendering**: SSR (Server-Side Rendering) for improved performance and SEO
 - **Language**: TypeScript for type safety
 - **State Management**: Pinia stores for reactive state management
