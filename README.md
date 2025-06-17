@@ -1,6 +1,6 @@
 # BloodBank App: A FullStack Nuxt-Laravel Project🩸
 
-BloodBank App is designed to efficiently manage blood donors and their donation records. The system automatically tracks donor eligibility based on their last donation date and provides a seamless experience for both administrators and donors through its intuitive web interface.
+BloodBank App is designed to efficiently manage blood donors and their donation records. The system automatically tracks donor eligibility based on their last donation date and provides a seamless experience for both administrators and donors through its intuitive web interface. The application utilizes cache server to cache repetitive and data that will not be updated frequently but will be frequently fetched, ensuring optimal performance and faster response times.
 
 ## 🚀 Technology Stack
 
@@ -47,6 +47,7 @@ This project embraces modern development methodologies:
 - **Code Review**: Manual code review process for AI-generated code to ensure quality assurance
 - **Clean Architecture**: Separation of concerns with service-controller pattern
 - **Singleton Pattern**: Centralized HTTP client implementation for consistent API communication
+- **Testing & Debugging**: Postman for API testing and Laravel Telescope for application debugging
 
 ## 🚦 Getting Started
 
