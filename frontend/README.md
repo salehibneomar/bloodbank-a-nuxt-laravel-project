@@ -1,4 +1,4 @@
-# Blood Donation Management System - Frontend
+# Frontend - Documentation
 
 A modern, responsive frontend application built with **Nuxt 3**, and **Quasar UI** for managing blood donation operations. This application provides an intuitive interface for donors, administrators, and staff to manage blood donation activities efficiently.
 
