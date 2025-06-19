@@ -6,7 +6,7 @@ BloodBank App is designed to efficiently manage blood donors and their donation 
 
 [![BloodBank App Demo](https://img.shields.io/badge/▶️_Watch_Demo-Google_Drive-blue?style=for-the-badge&logo=googledrive)](https://drive.google.com/file/d/1Urh92Swf_CibUCcCGdRRFBsHFwMD3AAa/view?usp=sharing)
 
-## �🚀 Technology Stack
+## 🚀 Technology Stack
 
 ### Backend (Laravel 12)
 
