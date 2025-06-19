@@ -17,7 +17,7 @@
 					</q-toolbar-title>
 				</NuxtLink>
 				<q-space />
-				<q-btn v-if="authUserRole" round flat size="sm" class="q-mx-sm">
+				<q-btn v-if="authUserRole && authStore.authUser" round flat size="sm" class="q-mx-sm">
 					<q-avatar size="36px">
 						<img
 							:src="`https://ui-avatars.com/api/?name=${authStore.authUser?.name}&color=ffffff&background=ff7675`"

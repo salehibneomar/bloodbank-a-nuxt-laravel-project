@@ -13,7 +13,18 @@
 	const donorStore = useDonorStore()
 
 	const { data: response, pending } = await useAsyncData('donor-list', () => donorStore.getAll())
-	const { current_page, per_page, last_page, from, to, total } = response.value
+	const initialPagingData = ref({
+		current_page: 1,
+		per_page: 10,
+		last_page: 1,
+		from: 1,
+		to: 10,
+		total: 0
+	})
+	if (response.value) {
+		const { current_page, per_page, last_page, from, to, total } = response.value
+		initialPagingData.value = { current_page, per_page, last_page, from, to, total }
+	}
 </script>
 
 <template>
@@ -23,7 +34,7 @@
 			<DonorPageContent
 				:donors="donorStore.donors"
 				:selectedBloodGroup="null"
-				:initialPagingData="{ current_page, per_page, last_page, from, to, total }"
+				:initialPagingData="initialPagingData"
 			/>
 		</div>
 	</q-page>
