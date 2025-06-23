@@ -277,6 +277,7 @@ This command concurrently runs:
     ```
 
 3. **Configure web server** (Nginx example)
+
     ```nginx
     server {
         listen 80;
@@ -323,28 +324,3 @@ SESSION_DRIVER=redis
 
 SANCTUM_STATEFUL_DOMAINS=your-frontend-domain.com
 ```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests: `composer test`
-5. Format code: `vendor/bin/pint`
-6. Submit a pull request
-
-## 📄 License
-
-This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-## 🆘 Support
-
-For support and questions:
-
--   Create an issue in the repository
--   Check the documentation
--   Review the API endpoints
-
----
-
-Built with ❤️ using Laravel 12
