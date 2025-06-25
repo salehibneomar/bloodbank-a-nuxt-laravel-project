@@ -28,7 +28,7 @@ cd backend
 ### 2. Install Dependencies
 ```bash
 composer install
-npm install
+npm install  # Required for compiling frontend assets (CSS/JS) used in Laravel views
 ```
 
 ### 3. Environment Configuration
@@ -73,7 +73,7 @@ If you're using [Laravel Herd](https://herd.laravel.com/), you don't need to run
 
 #### Option 3: With Queue Worker (Recommended for full functionality)
 ```bash
-# If using Laravel Herd, skip the first terminal
+# If you're using Herd, you can skip Terminal 1 where you would normally run php artisan serve
 # Terminal 1: Start the web server (skip if using Herd)
 php artisan serve
 
@@ -112,5 +112,5 @@ The application will be available at:
 │   ├── auth.php          # Authentication routes
 │   └── web.php           # Web routes
 ├── storage/               # Storage files
-└── tests/                 # Test files
+└── tests/                 # Test files (empty - tests not implemented yet)
 ```
